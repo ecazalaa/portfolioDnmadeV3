@@ -3,7 +3,7 @@
 backend:
   name: github
   # Remplace par ton propre dépôt une fois créé sur GitHub, ex. "emile-dupont/portfolio"
-  repo: ecazalaa/portfolioDNMADe2
+  repo: ecazalaa/portfolioDnmadeV3
   branch: main
 
 # Évite que Sveltia écrive des chaînes vides dans les champs facultatifs
