@@ -1,19 +1,29 @@
 ---
-title: Le pavillon
+title: Création d'un pavillon habitable
 category: architecture-interieur
-year: "2026"
+year: '2026'
 place: Réhabilitation, habitat individuel
-tools: SketchUp, maquette couleur, maquette volume
+tools: Autocar, Procreate, photoshop, Sketchup
 order: 1
-cover: ./cover.jpg
+cover: PAVILLON-17.png
 coverAlt: Planche technique du pavillon
 covers:
   - src: ./PAVILLON-15.png
-    alt: Vue du pavillon
+    alt: Axonométrie des usages
+    caption: Axonométrie des usages
+  - src: cover.jpg
+    alt: Planche technologique
+    caption: Maquette Couleur, Maquette volume
 gallery:
-  - src: ./etude-01.jpg
-    alt: Recherche de matière et de pli
-    caption: recherche de matière
+  - src: PAVILLON-9.png
+    alt: Coupe habillé
+    caption: coupe
+    size: s
+  - src: PAVILLON-13.png
+    alt: vue de dessus
+    size: m
+  - src: PAVILLON-14.png
+    alt: plan R+1
     size: l
 ---
 
