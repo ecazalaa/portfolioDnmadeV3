@@ -3,7 +3,7 @@ title: Création d'un pavillon habitable
 category: architecture-interieur
 year: '2026'
 place: Réhabilitation, habitat individuel
-tools: Autocar, Procreate, photoshop, Sketchup
+tools: Autocad, Procreate, photoshop, Sketchup
 order: 1
 cover: PAVILLON-17.png
 coverAlt: Planche technique du pavillon
