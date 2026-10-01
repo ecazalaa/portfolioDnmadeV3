@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+
+// À remplacer par tes vraies coordonnées.
+const EMAIL = 'emilecazalaa@gmail.com';
+const PHONE = '06 51 85 60 60';
+const PHONE_HREF = PHONE.replace(/\s/g, '');
+---
+<Base title="Contact" current="contact" description="Contacter Emile.">
+  <section class="wrap head">
+    <div class="mono">Contact</div>
+    <h1>Me contacter</h1>
+  </section>
+
+  <section class="wrap contact">
+    <a class="clink" href={`mailto:${EMAIL}`}>
+      <small class="mono">Email</small>{EMAIL}
+    </a>
+    <a class="clink" href={`tel:${PHONE_HREF}`}>
+      <small class="mono">Téléphone</small>{PHONE}
+    </a>
+    <a class="clink last" href="https://www.linkedin.com/in/emile-cazalaa" target="_blank" rel="noreferrer">
+      <small class="mono">Ailleurs</small>LinkedIn
+    </a>
+  </section>
+</Base>
+
+<style>
+  .head { padding: clamp(40px, 7vw, 80px) 0 clamp(24px, 5vw, 48px); }
+  h1 {
+    font-weight: 200;
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    letter-spacing: -0.03em;
+    margin: 0.3em 0 0;
+  }
+  .contact { padding-bottom: clamp(56px, 9vw, 100px); }
+  .clink {
+    display: block;
+    font-weight: 200;
+    font-size: clamp(1.8rem, 6vw, 3.4rem);
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding: 0.35em 0;
+    position: relative;
+  }
+  .clink.last { border-bottom: none; }
+  .clink:hover { color: var(--accent); }
+  .clink small {
+    display: block;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.2em;
+  }
+</style>

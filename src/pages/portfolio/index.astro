@@ -1,0 +1,124 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const categories = (await getCollection('categories')).sort((a, b) => a.data.order - b.data.order);
+const projects = await getCollection('projects');
+
+const grouped = categories.map((cat) => ({
+  ...cat,
+  items: projects
+    .filter((p) => p.data.category === cat.id)
+    .sort((a, b) => a.data.order - b.data.order),
+}));
+---
+<Base title="Portfolio" current="portfolio" description="Les projets d'Emile, classés par rubrique.">
+  <section class="wrap head">
+    <div class="mono">Portfolio</div>
+    <h1>Mes différents projets,<br />classé par rubrique.</h1>
+  </section>
+
+  <section class="wrap list">
+    {grouped.map((cat) => (
+      <div class="cat">
+        <button class="cat-head" data-target={`cat-${cat.id}`} aria-expanded="false">
+          <span class="arrow">+</span>
+          <h2>{cat.data.title}</h2>
+          <span class="cat-count mono">{cat.items.length} projet{cat.items.length > 1 ? 's' : ''}</span>
+        </button>
+        <div class="cat-body" id={`cat-${cat.id}`}>
+          <div class="plist">
+            {cat.items.length === 0 && <p class="note empty">Rien ici pour l'instant.</p>}
+            {cat.items.map((p) => (
+              <a class="prow" href={`/portfolio/${p.id}`}>{p.data.title}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .head { padding: clamp(40px, 7vw, 80px) 0 clamp(24px, 5vw, 48px); }
+  h1 {
+    font-weight: 200;
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin: 0.3em 0 0.4em;
+  }
+  .list { padding-bottom: clamp(48px, 8vw, 96px); }
+  .cat { margin-bottom: 0.4em; }
+  .cat-head {
+    all: unset;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8em;
+    cursor: pointer;
+    padding: 0.6em 0;
+    border-bottom: 1px solid var(--line);
+    width: 100%;
+  }
+  .arrow {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    transition: transform 0.35s;
+  }
+  .cat-head[aria-expanded="true"] .arrow { transform: rotate(45deg); }
+  .cat-head h2 {
+    font-weight: 300;
+    font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+    letter-spacing: -0.015em;
+    margin: 0;
+    flex: 1;
+    text-align: left;
+  }
+  .cat-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cat-body.open { max-height: 1200px; }
+  .plist { padding: 0.6em 0 1.4em; }
+  .empty { padding: 0.6em 0 0 1.4em; }
+  .prow {
+    display: block;
+    text-decoration: none;
+    color: var(--fg);
+    font-weight: 200;
+    font-size: clamp(1.6rem, 5vw, 3rem);
+    letter-spacing: -0.03em;
+    padding: 0.14em 0 0.14em 1.4em;
+    position: relative;
+    transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s;
+  }
+  .prow:hover, .prow:focus-visible {
+    padding-left: 1.9em;
+    color: var(--accent);
+  }
+  .prow::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    font-family: var(--font-mono);
+    font-size: 0.5em;
+    top: 0.55em;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .prow:hover::before, .prow:focus-visible::before { opacity: 1; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.cat-head').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.target!;
+      const body = document.getElementById(id)!;
+      const open = body.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+</script>

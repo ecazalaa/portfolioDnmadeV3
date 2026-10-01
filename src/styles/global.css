@@ -1,0 +1,130 @@
+/* =========================================================
+   DESIGN TOKENS
+   Palette + typo validées en direction visuelle 02.
+   Pour changer la note de couleur : modifie --accent (et --accent-dark
+   pour le mode sombre). Rien d'autre à toucher.
+   Pour brancher PP Telegraf : remplace la valeur de --font-sans par
+   "PP Telegraf" une fois les fichiers de police déposés dans
+   /public/fonts/ et déclarés plus bas (@font-face, section prête à
+   décommenter).
+   ========================================================= */
+:root {
+  --bg: #FAFAF7;
+  --fg: #141414;
+  --fg-2: #6E6A64;
+  --line: rgba(20, 20, 20, 0.13);
+  --paper: #FFFFFF;
+  --card: rgba(20, 20, 20, 0.028);
+
+  --accent: #C0582A;
+  --accent-soft: rgba(192, 88, 42, 0.14);
+
+  --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-hand: 'Caveat', cursive;
+
+  --pad: clamp(20px, 5vw, 72px);
+  --content-max: 1180px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151412;
+    --fg: #F2EFEA;
+    --fg-2: #9A948B;
+    --line: rgba(242, 239, 234, 0.14);
+    --paper: #1D1B18;
+    --card: rgba(242, 239, 234, 0.05);
+    --accent: #E08A5C;
+    --accent-soft: rgba(224, 138, 92, 0.16);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151412;
+  --fg: #F2EFEA;
+  --fg-2: #9A948B;
+  --line: rgba(242, 239, 234, 0.14);
+  --paper: #1D1B18;
+  --card: rgba(242, 239, 234, 0.05);
+  --accent: #E08A5C;
+  --accent-soft: rgba(224, 138, 92, 0.16);
+}
+
+/* Une fois PP Telegraf téléchargé (licence gratuite chez Pangram Pangram)
+   et ses fichiers .woff2 déposés dans /public/fonts/telegraf/, décommente
+   ceci et remplace --font-sans ci-dessus par 'PP Telegraf'.
+
+@font-face {
+  font-family: 'PP Telegraf';
+  src: url('/fonts/telegraf/PPTelegraf-UltraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Telegraf';
+  src: url('/fonts/telegraf/PPTelegraf-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+*/
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+.wrap {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 300;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+.hand {
+  font-family: var(--font-hand);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.note {
+  color: var(--fg-2);
+  max-width: 62ch;
+  font-size: 0.92rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* --- impression : base pour la version PDF, à affiner phase 2 --- */
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+  a { text-decoration: none; color: #000; }
+}

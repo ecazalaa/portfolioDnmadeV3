@@ -1,0 +1,25 @@
+---
+const year = new Date().getFullYear();
+---
+<footer>
+  <div class="wrap bar">
+    <span class="mono">Emile CAZALAA · DNMADe Espace · {year}</span>
+    <a class="mono" href="/contact">Contact</a>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--line);
+    padding: clamp(28px, 5vw, 48px) 0;
+  }
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+  }
+  a { text-decoration: none; }
+  a:hover { color: var(--accent); }
+</style>

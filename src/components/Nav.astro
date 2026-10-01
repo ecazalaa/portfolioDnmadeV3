@@ -1,0 +1,62 @@
+---
+const { current } = Astro.props as { current?: 'portfolio' | 'apropos' | 'contact' };
+const links = [
+  { href: '/portfolio', label: 'Portfolio', key: 'portfolio' },
+  { href: '/apropos', label: 'À propos', key: 'apropos' },
+  { href: '/contact', label: 'Contact', key: 'contact' },
+];
+---
+<nav class="site-nav">
+  <div class="wrap bar">
+    <a class="brand" href="/">Emile</a>
+    <ul>
+      {links.map((l) => (
+        <li>
+          <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>{l.label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .site-nav {
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 20;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.1em;
+    padding-bottom: 1.1em;
+  }
+  .brand {
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    gap: clamp(1em, 3vw, 2.2em);
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+    transition: color 0.25s;
+  }
+  a:hover, a[aria-current="page"] {
+    color: var(--accent);
+  }
+</style>

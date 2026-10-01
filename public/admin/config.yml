@@ -1,0 +1,132 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  # Remplace par ton propre dépôt une fois créé sur GitHub, ex. "emile-dupont/portfolio"
+  repo: ecazalaa/portfolioDNMADe2
+  branch: main
+
+# Évite que Sveltia écrive des chaînes vides dans les champs facultatifs
+# laissés vides — sans ça, la validation du contenu par Astro peut échouer.
+output:
+  omit_empty_optional_fields: true
+
+# Dossier de secours, non utilisé tant que chaque collection définit
+# son propre media_folder/public_folder ci-dessous.
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: projects
+    label: Projets
+    label_singular: Projet
+    folder: src/content/projects
+    create: true
+    delete: true
+    # Chaque projet vit dans son propre dossier : src/content/projects/<slug>/index.md
+    path: '{{slug}}/index'
+    # Les images d'un projet sont déposées dans son propre dossier, pas ailleurs.
+    media_folder: ''
+    public_folder: ''
+    slug: '{{slug}}'
+    summary: '{{title}} — {{year}}'
+    sortable_fields: [title, year, order]
+    fields:
+      - label: Titre
+        name: title
+        widget: string
+      - label: Rubrique
+        name: category
+        widget: relation
+        collection: categories
+        search_fields: [title]
+        display_fields: [title]
+        value_field: '{{slug}}'
+      - label: Année
+        name: year
+        widget: string
+      - label: Lieu
+        name: place
+        widget: string
+        required: false
+      - label: Outils
+        name: tools
+        widget: string
+        required: false
+      - label: Ordre dans la liste (0 = en premier)
+        name: order
+        widget: number
+        value_type: int
+        default: 0
+        required: false
+      - label: Image de couverture (1re image du bandeau)
+        name: cover
+        widget: image
+      - label: Texte alternatif (couverture)
+        name: coverAlt
+        widget: string
+        required: false
+      - label: "Images supplémentaires du bandeau (défilement)"
+        name: covers
+        widget: list
+        required: false
+        summary: '{{caption}}'
+        fields:
+          - label: Image
+            name: src
+            widget: image
+          - label: Texte alternatif
+            name: alt
+            widget: string
+            required: false
+          - label: Légende (manuscrite)
+            name: caption
+            widget: string
+            required: false
+      - label: "Cahier (croquis, planches, réflexions)"
+        name: gallery
+        widget: list
+        required: false
+        summary: '{{caption}}'
+        fields:
+          - label: Image
+            name: src
+            widget: image
+          - label: Texte alternatif
+            name: alt
+            widget: string
+            required: false
+          - label: Légende (manuscrite)
+            name: caption
+            widget: string
+            required: false
+          - label: Largeur maximale sur la page
+            name: size
+            widget: select
+            default: m
+            options:
+              - { label: Petite, value: s }
+              - { label: Moyenne, value: m }
+              - { label: Grande, value: l }
+      - label: Texte de présentation
+        name: body
+        widget: markdown
+
+  - name: categories
+    label: Rubriques
+    label_singular: Rubrique
+    folder: src/content/categories
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{title}}'
+    fields:
+      - label: Titre
+        name: title
+        widget: string
+      - label: Ordre (0 = en premier)
+        name: order
+        widget: number
+        value_type: int
+        default: 0
+        required: false

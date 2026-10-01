@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+
+const doors = [
+  {
+    num: '01',
+    href: '/portfolio',
+    label: 'Portfolio',
+    tag: 'Portfolio →',
+    path: 'M2 12 C 60 4, 140 18, 220 9 S 340 3, 398 11',
+  },
+  {
+    num: '02',
+    href: '/apropos',
+    label: 'À propos',
+    tag: 'En 2 mots',
+    path: 'M2 10 C 70 18, 150 2, 230 12 S 330 6, 398 9',
+  },
+  {
+    num: '03',
+    href: '/contact',
+    label: 'Contact',
+    tag: 'Mon Contact !',
+    path: 'M2 11 C 55 3, 120 17, 210 8 S 320 15, 398 10',
+  },
+];
+---
+<Base title="Accueil" description="Portfolio d'Emile — DNMADe Espace, Toulouse.">
+  <section class="landing-wrap">
+    <div class="wrap">
+      <div class="landing">
+        {doors.map((d, i) => (
+          <a class={`land-item li${i + 1}`} href={d.href}>
+            <span class="num">{d.num}</span>{d.label}
+            <span class="land-tag">{d.tag}</span>
+            <svg viewBox="0 0 400 20" preserveAspectRatio="none" aria-hidden="true">
+              <path d={d.path}></path>
+            </svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .landing-wrap {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+  }
+  .landing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+  }
+  .land-item {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: var(--fg);
+    font-weight: 200;
+    font-size: clamp(2.6rem, 9vw, 6.4rem);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    padding: 0.06em 0;
+    width: max-content;
+  }
+  .land-item .num {
+    font-family: var(--font-mono);
+    font-size: 0.16em;
+    color: var(--fg-2);
+    vertical-align: top;
+    margin-right: 0.35em;
+    letter-spacing: 0.1em;
+  }
+  .land-item svg {
+    position: absolute;
+    left: 0;
+    bottom: 0.06em;
+    width: 100%;
+    height: 0.22em;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .land-item svg path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    transition: stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .land-item:hover svg path,
+  .land-item:focus-visible svg path {
+    stroke-dashoffset: 0;
+  }
+  .land-tag {
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+    color: var(--accent);
+    position: absolute;
+    opacity: 0;
+    transform: translateY(4px) rotate(-3deg);
+    transition: opacity 0.3s, transform 0.3s;
+    white-space: nowrap;
+    right: 0;
+    top: -1.1em;
+  }
+  .land-item:hover .land-tag,
+  .land-item:focus-visible .land-tag {
+    opacity: 1;
+    transform: translateY(0) rotate(-3deg);
+  }
+</style>

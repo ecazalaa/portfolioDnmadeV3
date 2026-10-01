@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import portrait from '../assets/portrait.jpg';
+---
+<Base title="À propos" current="apropos" description="Emile, étudiant en DNMADe Espace à Toulouse.">
+  <section class="wrap head">
+    <div class="mono">À propos</div>
+    <h1>En deux mots.</h1>
+  </section>
+
+  <section class="wrap about">
+    <figure class="about-ph">
+      <Image
+        src={portrait}
+        alt="Portrait d'Emile"
+        widths={[480, 800, 1200]}
+        sizes="(max-width: 760px) 92vw, 38vw"
+      />
+    </figure>
+    <div class="text">
+      <p>
+        Étudiant en DNMADe Espace 2eme année à Toulouse. Je suis passioné par l'art et l'architecture. J'aime le rapport entre l'art et la nature, comment l'architecture
+        peut dialoguer/interroger la nature. Avant ça, deux ans d'informatique : de quoi faire ce site web.
+      </p>
+      <p>
+        Je suis actuellement a la recherche d'un stage auprès d'architecte, paysagiste, architecte d'intérieur pour les dates du 11 janvier au 05 février et du 17 mai au 25 juin 2027.
+      </p>
+
+      <div class="tags">
+        <span class="tag">DNMADe Espace 2 · Toulouse</span>
+        <span class="tag">Recherche de stage</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { padding: clamp(40px, 7vw, 80px) 0 clamp(24px, 5vw, 48px); }
+  h1 {
+    font-weight: 200;
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    letter-spacing: -0.03em;
+    margin: 0.3em 0 0;
+  }
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: clamp(2em, 6vw, 4.5em);
+    align-items: start;
+    padding-bottom: clamp(48px, 8vw, 96px);
+  }
+  @media (max-width: 760px) { .about { grid-template-columns: 1fr; } }
+  .about-ph {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    background: var(--card);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .about-ph :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 18%;
+    display: block;
+  }
+  .text p { font-size: 1.05rem; font-weight: 300; color: var(--fg); max-width: 58ch; }
+  .text p + p { color: var(--fg-2); }
+  .tags { display: flex; gap: 0.5em; flex-wrap: wrap; margin-top: 1.4em; }
+  .tag {
+    border: 1px solid var(--line);
+    padding: 0.35em 0.8em;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    color: var(--fg-2);
+  }
+</style>
