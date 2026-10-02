@@ -27,6 +27,6 @@ gallery:
     size: l
 ---
 
-Les modules et les niveaux naissent de la base du pavillon et se projettent dans l'espace comme des masses minérales, chacune autonome mais ancrée dans un socle commun.
+Pour un couple de grimpeurs, je crée, dans un pavillon, un **parcours** d’entraînement en insérant les fonctions domestiques dans des **modules**, sur des **niveaux** et des **seuils**.
 
-La couleur orange guide et oriente le parcours dans la maison ; le reste reste volontairement neutre, pour marquer les seuils sans jamais les souligner.
+Projet réaliser sur 8 semaines, avec une grande phase d'analyse, puis de proposition d'hypothèses et enfin la réalisation du projet.
