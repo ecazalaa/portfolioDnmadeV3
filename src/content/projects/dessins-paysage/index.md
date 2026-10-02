@@ -1,5 +1,5 @@
 ---
-title: Dessins de paysages
+title: Dessins
 category: recherche
 year: 2025/2026
 place: Dans différents lieu de toulouse
