@@ -1,4 +1,4 @@
 ---
-title: Recherche & dessin
+title: Expression créative
 order: 3
 ---
