@@ -1,8 +1,8 @@
 ---
-title: Dessins
+title: Croquis sur le vifs
 category: recherche
 year: 2025/2026
-place: Dans différents lieu de toulouse
+place: Toulouse et ses environs
 tools: Dessins crayon, feutres, aquarelles
 order: 1
 cover: Scanné 2 oct. 2026 à 10_54_25_page-0001.jpg
