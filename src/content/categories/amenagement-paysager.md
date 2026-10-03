@@ -1,4 +1,4 @@
 ---
-title: Aménagement paysager
+title: Architecture
 order: 1
 ---
