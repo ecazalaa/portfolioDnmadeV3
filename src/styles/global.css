@@ -19,7 +19,7 @@
   --accent: #C0582A;
   --accent-soft: rgba(192, 88, 42, 0.14);
 
-  --font-sans: 'PP Telegraf', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --font-hand: 'Caveat', cursive;
 
@@ -50,7 +50,7 @@
   --accent-soft: rgba(224, 138, 92, 0.16);
 }
 
-
+/*
 @font-face {
   font-family: 'PP Telegraf';
   src: url('/fonts/Telegraf/PPTelegraf-UltraLight.otf') format('otf');
@@ -63,7 +63,7 @@
   font-weight: 400;
   font-display: swap;
 }
-
+*/
 
 *, *::before, *::after { box-sizing: border-box; }
 
