@@ -7,6 +7,11 @@ tools: Dessins crayon, feutres, aquarelles
 order: 1
 cover: Scanné 2 oct. 2026 à 10_54_25_page-0001.jpg
 coverAlt: croquis aquarelle paysage
+covers:
+  - src: DNMADE20260921135229_page-0001.jpg
+  - src: DNMADE20260921135304_page-0001.jpg
+  - src: img006.png
+  - src: img003.jpeg
 gallery:
   - src: Scanné 2 oct. 2026 à 10_52_50_page-0001.jpg
     alt: croquis paysage
