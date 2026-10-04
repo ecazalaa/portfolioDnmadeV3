@@ -17,6 +17,9 @@ covers:
   - src: cover.jpg
     alt: Planche technologique
     caption: Maquette Couleur, Maquette volume
+  - src: PAVILLON-9.png
+  - src: PAVILLON-13.png
+  - src: PAVILLON-14.png
 gallery:
   - src: PAVILLON-9.png
     alt: Coupe habillé
