@@ -28,6 +28,9 @@ gallery:
   - src: PAVILLON-14.png
     alt: plan R+1
     size: l
+  - src: Capture d’écran 2026-10-04 à 13.48.04.png
+    caption: recherche couleurs/ matériaux
+    size: m
 ---
 
 Projet de fin de 1ere année de DNMADe de **8 semaines**. Maximisation de toutes mes compétences en analyse, conception et création. Utilisation de logiciels professionnels: **Rhino; AutoCad, Procreate, PhotoShop**. 
