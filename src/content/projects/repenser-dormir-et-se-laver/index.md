@@ -9,6 +9,20 @@ cover: 7.png
 covers:
   - src: 1.png
     caption: planche d'analyse
+  - src: 2.png
+    caption: planche technique
+  - src: 3.png
+  - src: 4.png
+  - src: 5.png
+  - src: 6.png
+gallery:
+  - src: 8.png
+    caption: maquette
+    size: l
+  - src: 11.png
+    size: s
+  - src: 9.png
+    size: m
 ---
 
 Ce projet d'architecture sensorielle, mené sur **4 semaines**, avait pour but de réinventer un espace qui lie à la fois dormir et se laver d'après une interprétation personnelle.
