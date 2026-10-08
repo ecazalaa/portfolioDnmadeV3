@@ -12,6 +12,7 @@ covers:
   - src: DNMADE20260921135304_page-0001.jpg
   - src: img006.png
   - src: img003.jpeg
+  - src: IMG_5969-2.jpg
 gallery:
   - src: Scanné 2 oct. 2026 à 10_52_50_page-0001.jpg
     alt: croquis paysage
