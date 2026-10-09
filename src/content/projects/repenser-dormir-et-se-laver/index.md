@@ -23,6 +23,13 @@ gallery:
     size: s
   - src: 9.png
     size: m
+  - src: Scanné 3 oct. 2026 à 18_25_50_page-0001.jpg
+    caption: brouillon de recherche
+    size: l
+  - src: Scanné 3 oct. 2026 à 18_26_04_page-0001.jpg
+    size: m
+  - src: Scanné 3 oct. 2026 à 18_25_21_page-0001.jpg
+    size: s
 ---
 
 Ce projet d'architecture sensorielle, mené sur **4 semaines**, avait pour but de réinventer un espace qui lie à la fois dormir et se laver d'après une interprétation personnelle.
