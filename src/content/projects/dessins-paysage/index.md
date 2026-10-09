@@ -30,7 +30,7 @@ gallery:
     size: l
   - src: DNMADE20261007161859_pages-to-jpg-0001.jpg
     alt: essai à la craie grasse
-    size: s
+    size: m
 ---
 
 Différents croquis de paysages dessinés/ peint sur place. 
