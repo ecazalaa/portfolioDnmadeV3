@@ -95,6 +95,22 @@ Le nom du fichier (sans `.md`) est l'identifiant à utiliser dans le champ
 `category` des projets. Une fois le CMS branché (voir plus bas), la
 collection **Rubriques** fait la même chose depuis un formulaire.
 
+## Comment fonctionne la page Portfolio
+
+Tous les projets sont affichés sur une seule page (`/portfolio`), sans
+classement visible, avec leur image de couverture (le champ `cover` du projet).
+Ils apparaissent dans l'ordre des rubriques puis du champ `order` du projet
+(plus petit = plus haut) : les rubriques ne servent plus qu'à fixer cet ordre.
+Un clic ouvre la page détaillée du projet. Sur la page d'un projet, un clic
+sur n'importe quelle image (bandeau du haut ou « cahier ») l'affiche en grand ;
+on passe d'une image à l'autre avec les flèches du clavier, les boutons, ou en
+glissant le doigt sur téléphone.
+
+Si tu écris du CSS pour une page : n'utilise jamais `padding: X 0` sur un
+élément qui a la classe `wrap` (ça supprime les marges latérales et le texte
+colle au bord du téléphone). Utilise `padding-block`, `padding-top` ou
+`padding-bottom`.
+
 ## Textes à personnaliser
 
 Deux-trois choses sont encore des textes provisoires à remplacer :
