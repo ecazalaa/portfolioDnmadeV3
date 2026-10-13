@@ -21,7 +21,7 @@ gallery:
     size: l
   - src: img006.png
     alt: vue de mon balcon
-    caption: travaille sur les arbres et les ombres.
+    caption: travail sur les arbres et les ombres
     size: m
   - src: img002.jpg
     size: m
@@ -34,6 +34,6 @@ gallery:
     size: m
 ---
 
-Différents croquis de paysages dessinés/ peint sur place. 
+Différents croquis de paysages dessinés/ peints sur place. 
 
-Travaille effectué dans le cadre des cours d'outils d'expression créative.
+Travaille effectué dans le cadre des cours d'outils d'expression créative et dans mon temps personnel.
