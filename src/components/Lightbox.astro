@@ -1,0 +1,264 @@
+---
+// Visionneuse « image en grand ». À placer une seule fois dans une page.
+// Toute image enveloppée dans <button class="zoom" data-zoom="nom-du-groupe">
+// devient cliquable ; les images d'un même groupe se suivent avec ← / →,
+// les boutons, ou un glissement du doigt sur téléphone.
+---
+<dialog class="lb" data-lb aria-label="Image agrandie">
+  <div class="lb-top">
+    <button type="button" class="lb-btn" data-lb-close aria-label="Fermer">Fermer ✕</button>
+  </div>
+
+  <div class="lb-stage" data-lb-stage>
+    <img class="lb-img" data-lb-img alt="" />
+  </div>
+
+  <div class="lb-bottom">
+    <p class="lb-cap hand" data-lb-cap></p>
+    <div class="lb-ui" data-lb-ui>
+      <button type="button" class="lb-btn" data-lb-prev aria-label="Image précédente">←</button>
+      <span class="lb-count mono" data-lb-count aria-live="polite"></span>
+      <button type="button" class="lb-btn" data-lb-next aria-label="Image suivante">→</button>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .lb {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .lb[open] {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100vh;
+    height: 100dvh;
+    animation: lb-in 0.22s ease-out;
+  }
+  .lb::backdrop { background: rgba(20, 20, 20, 0.35); }
+  @keyframes lb-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Même marge latérale que le reste du site */
+  .lb-top,
+  .lb-bottom {
+    padding-left: max(var(--pad), 14px);
+    padding-right: max(var(--pad), 14px);
+  }
+  .lb-top {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.5em;
+  }
+  .lb-stage {
+    position: relative;
+    min-height: 0;
+    margin: 0 clamp(12px, 3vw, 48px);
+    cursor: zoom-out;
+  }
+  .lb-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* le glissement horizontal est géré par le script ; le pincement reste natif */
+    touch-action: pan-y pinch-zoom;
+  }
+  .lb-bottom {
+    padding-top: 0.4em;
+    padding-bottom: max(0.8em, env(safe-area-inset-bottom));
+  }
+  .lb-cap {
+    margin: 0;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    color: var(--fg-2);
+    min-height: 1.25em;
+  }
+  .lb-ui {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+  .lb-ui[hidden] { display: none; }
+
+  /* zones tactiles d'au moins 44 px */
+  .lb-btn {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.6em;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--fg-2);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lb-btn:hover,
+  .lb-btn:focus-visible { color: var(--accent); }
+  .lb-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+</style>
+
+<style is:global>
+  /* pas de défilement de la page derrière l'image agrandie */
+  html:has(dialog.lb[open]) { overflow: hidden; }
+</style>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lb]');
+
+  if (dlg) {
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const cap = dlg.querySelector<HTMLElement>('[data-lb-cap]')!;
+    const count = dlg.querySelector<HTMLElement>('[data-lb-count]')!;
+    const ui = dlg.querySelector<HTMLElement>('[data-lb-ui]')!;
+    const stage = dlg.querySelector<HTMLElement>('[data-lb-stage]')!;
+    const prevBtn = dlg.querySelector<HTMLButtonElement>('[data-lb-prev]')!;
+    const nextBtn = dlg.querySelector<HTMLButtonElement>('[data-lb-next]')!;
+
+    let items: HTMLElement[] = [];
+    let index = 0;
+    let opener: HTMLElement | null = null;
+
+    // La plus grande version déjà générée par Astro (le srcset de la miniature).
+    const biggest = (thumb: HTMLImageElement) => {
+      let best = '';
+      let bestW = 0;
+      for (const m of (thumb.getAttribute('srcset') || '').matchAll(/(\S+)\s+(\d+)w/g)) {
+        const w = Number(m[2]);
+        if (w > bestW) {
+          bestW = w;
+          best = m[1];
+        }
+      }
+      return best || thumb.currentSrc || thumb.src;
+    };
+
+    const show = (i: number) => {
+      const n = items.length;
+      index = ((i % n) + n) % n;
+      const btn = items[index];
+      opener = btn;
+      const thumb = btn.querySelector<HTMLImageElement>('img')!;
+
+      // 1) on affiche tout de suite ce qui est déjà chargé…
+      const quick = thumb.currentSrc || thumb.src;
+      img.alt = thumb.alt;
+      img.src = quick;
+
+      // 2) …puis on passe à la grande version dès qu'elle est prête
+      const full = biggest(thumb);
+      if (full && full !== quick) {
+        const hi = new Image();
+        hi.onload = () => {
+          if (items[index] === btn) img.src = full;
+        };
+        hi.src = full;
+      }
+
+      const caption = btn.closest('figure')?.querySelector('figcaption')?.textContent?.trim() ?? '';
+      cap.textContent = caption;
+      count.textContent = n > 1 ? `${index + 1} / ${n}` : '';
+      ui.hidden = n < 2;
+    };
+
+    const prev = () => items.length > 1 && show(index - 1);
+    const next = () => items.length > 1 && show(index + 1);
+
+    // Ouverture : clic (ou Entrée / Espace, c'est un vrai bouton) sur une image du projet
+    document.addEventListener('click', (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>('[data-zoom]');
+      if (!t) return;
+      const group = t.dataset.zoom!;
+      items = [...document.querySelectorAll<HTMLElement>('[data-zoom]')].filter(
+        (el) => el.dataset.zoom === group,
+      );
+      show(items.indexOf(t));
+      dlg.showModal();
+    });
+
+    // Fermeture : clic n'importe où sauf sur ← / →. Échap est géré par le navigateur.
+    dlg.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('[data-lb-prev], [data-lb-next]')) return;
+      dlg.close();
+    });
+    dlg.addEventListener('close', () => {
+      img.removeAttribute('src');
+      // On revient sur la dernière image regardée : focus + carrousel / page calés dessus
+      opener?.focus({ preventScroll: true });
+      opener?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // Clavier : on garde les flèches pour la visionneuse (le carrousel derrière ne bouge pas)
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.stopPropagation();
+        prev();
+      } else if (e.key === 'ArrowRight') {
+        e.stopPropagation();
+        next();
+      }
+    });
+
+    // Téléphone : glisser vers la gauche / la droite change d'image
+    let x0 = 0;
+    let y0 = 0;
+    let tracking = false;
+    stage.addEventListener(
+      'touchstart',
+      (e) => {
+        tracking = e.touches.length === 1;
+        if (tracking) {
+          x0 = e.touches[0].clientX;
+          y0 = e.touches[0].clientY;
+        }
+      },
+      { passive: true },
+    );
+    stage.addEventListener(
+      'touchmove',
+      (e) => {
+        if (e.touches.length > 1) tracking = false; // pincement = zoom, pas un changement d'image
+      },
+      { passive: true },
+    );
+    stage.addEventListener(
+      'touchend',
+      (e) => {
+        if (!tracking) return;
+        tracking = false;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - x0;
+        const dy = t.clientY - y0;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          if (dx < 0) next();
+          else prev();
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>
