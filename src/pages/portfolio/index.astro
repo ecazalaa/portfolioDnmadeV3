@@ -1,46 +1,59 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
-const categories = (await getCollection('categories')).sort((a, b) => a.data.order - b.data.order);
-const projects = await getCollection('projects');
+// Une seule liste de projets, sans rubriques affichées. On garde l'ordre actuel :
+// celui des rubriques (src/content/categories), puis `order` du projet dans sa rubrique.
+const categories = await getCollection('categories');
+const rank = new Map(categories.map((c) => [c.id, c.data.order]));
+const projects = (await getCollection('projects')).sort(
+  (a, b) =>
+    (rank.get(a.data.category) ?? 999) - (rank.get(b.data.category) ?? 999) ||
+    a.data.order - b.data.order,
+);
 
-const grouped = categories.map((cat) => ({
-  ...cat,
-  items: projects
-    .filter((p) => p.data.category === cat.id)
-    .sort((a, b) => a.data.order - b.data.order),
-}));
+// La toute première image est chargée tout de suite (c'est celle qu'on voit
+// en arrivant) ; les suivantes se chargent au fil du défilement.
+const firstId = projects[0]?.id;
 ---
-<Base title="Portfolio" current="portfolio" description="Les projets d'Emile, classés par rubrique.">
+<Base title="Portfolio" current="portfolio" description="Les projets d'Emile.">
   <section class="wrap head">
     <div class="mono">Portfolio</div>
-    <h1>Mes différents projets,<br />classés par rubrique.</h1>
+    <h1>Mes différents projets.</h1>
   </section>
 
   <section class="wrap list">
-    {grouped.map((cat) => (
-      <div class="cat">
-        <button class="cat-head" data-target={`cat-${cat.id}`} aria-expanded="false">
-          <span class="arrow">+</span>
-          <h2>{cat.data.title}</h2>
-          <span class="cat-count mono">{cat.items.length} projet{cat.items.length > 1 ? 's' : ''}</span>
-        </button>
-        <div class="cat-body" id={`cat-${cat.id}`}>
-          <div class="plist">
-            {cat.items.length === 0 && <p class="note empty">Rien ici pour l'instant.</p>}
-            {cat.items.map((p) => (
-              <a class="prow" href={`/portfolio/${p.id}`}>{p.data.title}</a>
-            ))}
+    <div class="grid">
+      {projects.map((p) => (
+        <a class="card" id={p.id} href={`/portfolio/${p.id}`}>
+          <div class="frame">
+            <Image
+              src={p.data.cover}
+              alt={p.data.coverAlt || p.data.title}
+              widths={[480, 800, 1100, 1500]}
+              sizes="(min-width: 1180px) 520px, (min-width: 860px) 44vw, 92vw"
+              loading={p.id === firstId ? 'eager' : 'lazy'}
+              fetchpriority={p.id === firstId ? 'high' : 'auto'}
+            />
           </div>
-        </div>
-      </div>
-    ))}
+          <div class="info">
+            <div>
+              <h2 class="title">{p.data.title}</h2>
+              <span class="tag hand" aria-hidden="true">voir le projet →</span>
+            </div>
+            <span class="year mono">{p.data.year}</span>
+          </div>
+        </a>
+      ))}
+    </div>
   </section>
 </Base>
 
 <style>
-  .head { padding: clamp(40px, 7vw, 80px) 0 clamp(24px, 5vw, 48px); }
+  /* padding-block (et non "padding: x 0") : on ne doit jamais écraser les
+     marges latérales de .wrap, sinon le texte colle au bord sur téléphone. */
+  .head { padding-block: clamp(40px, 7vw, 80px) clamp(24px, 5vw, 48px); }
   h1 {
     font-weight: 200;
     font-size: clamp(2rem, 6vw, 3.6rem);
@@ -48,77 +61,84 @@ const grouped = categories.map((cat) => ({
     line-height: 1.02;
     margin: 0.3em 0 0.4em;
   }
+
   .list { padding-bottom: clamp(48px, 8vw, 96px); }
-  .cat { margin-bottom: 0.4em; }
-  .cat-head {
-    all: unset;
-    display: flex;
-    align-items: baseline;
-    gap: 0.8em;
-    cursor: pointer;
-    padding: 0.6em 0;
-    border-bottom: 1px solid var(--line);
-    width: 100%;
+
+  /* --- les projets : une grille qui défile, la couverture d'abord --- */
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.2em, 6vw, 3.4em) clamp(1.4em, 3vw, 2.4em);
   }
-  .arrow {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--accent);
-    transition: transform 0.35s;
+  @media (min-width: 860px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  .cat-head[aria-expanded="true"] .arrow { transform: rotate(45deg); }
-  .cat-head h2 {
-    font-weight: 300;
-    font-size: clamp(1.15rem, 2.4vw, 1.6rem);
-    letter-spacing: -0.015em;
-    margin: 0;
-    flex: 1;
-    text-align: left;
-  }
-  .cat-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .cat-body.open { max-height: 1200px; }
-  .plist { padding: 0.6em 0 1.4em; }
-  .empty { padding: 0.6em 0 0 1.4em; }
-  .prow {
+
+  .card {
     display: block;
     text-decoration: none;
     color: var(--fg);
-    font-weight: 200;
-    font-size: clamp(1.6rem, 5vw, 3rem);
-    letter-spacing: -0.03em;
-    padding: 0.14em 0 0.14em 1.4em;
-    position: relative;
-    transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s;
+    /* quand on revient depuis un projet (#ancre), on ne reste pas sous la barre du haut */
+    scroll-margin-top: 5.5rem;
   }
-  .prow:hover, .prow:focus-visible {
-    padding-left: 1.9em;
-    color: var(--accent);
+  .card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px;
   }
-  .prow::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    font-family: var(--font-mono);
-    font-size: 0.5em;
-    top: 0.55em;
-    color: var(--accent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .prow:hover::before, .prow:focus-visible::before { opacity: 1; }
-</style>
 
-<script>
-  document.querySelectorAll<HTMLButtonElement>('.cat-head').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.target!;
-      const body = document.getElementById(id)!;
-      const open = body.classList.toggle('open');
-      btn.setAttribute('aria-expanded', String(open));
-    });
-  });
-</script>
+  /* Les couvertures sont des planches ~7:5 : ce cadrage les montre presque en entier. */
+  .frame {
+    aspect-ratio: 7 / 5;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .info {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1em;
+    padding-top: 0.85em;
+  }
+  .title {
+    font-weight: 200;
+    font-size: clamp(1.35rem, 3.6vw, 1.9rem);
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    margin: 0;
+    text-wrap: balance;
+    transition: color 0.3s;
+  }
+  .year { flex: none; }
+  .tag {
+    display: block;
+    font-size: 1.05rem;
+    line-height: 1.2;
+    margin-top: 0.25em;
+    transform: rotate(-2deg);
+    transform-origin: left center;
+  }
+
+  /* Souris : le détail apparaît au survol. Tactile : "voir le projet" reste
+     toujours visible, puisqu'il n'y a pas de survol sur téléphone. */
+  @media (hover: hover) {
+    .tag {
+      opacity: 0;
+      transform: translateY(3px) rotate(-2deg);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .card:hover .frame :global(img) { transform: scale(1.035); }
+    .card:hover .title { color: var(--accent); }
+    .card:hover .tag,
+    .card:focus-visible .tag {
+      opacity: 1;
+      transform: translateY(0) rotate(-2deg);
+    }
+  }
+</style>

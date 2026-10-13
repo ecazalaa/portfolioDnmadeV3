@@ -86,10 +86,15 @@ img { max-width: 100%; display: block; }
 
 a { color: inherit; }
 
+/* Marges latérales du site. IMPORTANT : dans les pages, ne jamais écrire
+   "padding: X 0" sur un élément .wrap (ça remet les marges latérales à 0 et
+   le texte colle au bord du téléphone). Utiliser padding-block / padding-top /
+   padding-bottom. */
 .wrap {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 0 var(--pad);
+  padding-left: var(--pad);
+  padding-right: var(--pad);
 }
 
 .mono {
@@ -111,6 +116,20 @@ a { color: inherit; }
   color: var(--fg-2);
   max-width: 62ch;
   font-size: 0.92rem;
+}
+
+/* Image cliquable qui s'ouvre en grand (voir components/Lightbox.astro) */
+.zoom {
+  all: unset;
+  display: block;
+  box-sizing: border-box;
+  max-width: 100%;
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+.zoom:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {

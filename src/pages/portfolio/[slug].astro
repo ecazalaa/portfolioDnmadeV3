@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import HeroSlides from '../../components/HeroSlides.astro';
+import Lightbox from '../../components/Lightbox.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -31,7 +32,7 @@ const sizeMax: Record<'s' | 'm' | 'l', number> = {
 ---
 <Base title={title} current="portfolio" description={`${title} — ${place ?? ''}`}>
   <section class="wrap head">
-    <a class="back mono" href="/portfolio">← Portfolio</a>
+    <a class="back mono" href={`/portfolio#${project.id}`}>← Portfolio</a>
     <h1>{title}</h1>
     <div class="pmeta">
       <div><span class="hand">année</span><b>{year}</b></div>
@@ -63,12 +64,19 @@ const sizeMax: Record<'s' | 'm' | 'l', number> = {
               class="tack"
               style={`--w: ${w}px; transform: rotate(${rotations[i % rotations.length]}deg);`}
             >
-              <Image
-                src={g.src}
-                alt={g.alt || title}
-                widths={[320, 640, 960, 1400]}
-                sizes={`${w}px`}
-              />
+              <button
+                type="button"
+                class="zoom"
+                data-zoom="cahier"
+                aria-label={g.alt ? `Agrandir l'image : ${g.alt}` : "Agrandir l'image"}
+              >
+                <Image
+                  src={g.src}
+                  alt={g.alt || title}
+                  widths={[320, 640, 960, 1400, 2000]}
+                  sizes={`${w}px`}
+                />
+              </button>
               {g.caption && <figcaption>{g.caption}</figcaption>}
             </figure>
           );
@@ -76,10 +84,13 @@ const sizeMax: Record<'s' | 'm' | 'l', number> = {
       </div>
     </section>
   )}
+
+  <Lightbox />
 </Base>
 
 <style>
-  .head { padding: clamp(32px, 6vw, 64px) 0 clamp(16px, 3vw, 28px); }
+  /* padding-block : ne jamais écraser les marges latérales de .wrap */
+  .head { padding-block: clamp(32px, 6vw, 64px) clamp(16px, 3vw, 28px); }
   .back { text-decoration: none; display: inline-block; margin-bottom: 1.4em; }
   .back:hover { color: var(--accent); }
   h1 {
@@ -97,7 +108,7 @@ const sizeMax: Record<'s' | 'm' | 'l', number> = {
   .pmeta div span { display: block; font-size: 1.2rem; margin-bottom: 0.15em; }
   .pmeta div b { font-weight: 400; font-size: 0.95rem; }
 
-  .ptext { padding: clamp(28px, 5vw, 56px) 0; }
+  .ptext { padding-block: clamp(28px, 5vw, 56px); }
   .prose {
     max-width: 68ch;
     color: var(--fg-2);
@@ -125,11 +136,14 @@ const sizeMax: Record<'s' | 'm' | 'l', number> = {
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s;
     cursor: default;
   }
-  .tack:hover {
-    transform: rotate(0deg) scale(1.03) !important;
-    box-shadow: 0 18px 34px rgba(20, 20, 20, 0.2);
-    z-index: 2;
-    position: relative;
+  .tack .zoom { width: 100%; }
+  @media (hover: hover) {
+    .tack:hover {
+      transform: rotate(0deg) scale(1.03) !important;
+      box-shadow: 0 18px 34px rgba(20, 20, 20, 0.2);
+      z-index: 2;
+      position: relative;
+    }
   }
   .tack :global(img) {
     width: 100%;

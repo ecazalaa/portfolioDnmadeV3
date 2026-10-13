@@ -19,12 +19,14 @@ const multiple = slides.length > 1;
   <div class="hero-track" data-hero-track>
     {slides.map((slide, i) => (
       <figure class="hero-slide" data-hero-slide>
-        <Image
-          src={slide.src}
-          alt={slide.alt}
-          widths={[720, 1100, 1600, 2200]}
-          sizes="(max-width: 1180px) 92vw, 1180px"
-        />
+        <button type="button" class="zoom" data-zoom="hero" aria-label={`Agrandir l'image ${i + 1}`}>
+          <Image
+            src={slide.src}
+            alt={slide.alt}
+            widths={[720, 1100, 1600, 2200]}
+            sizes="(max-width: 1180px) 92vw, 1180px"
+          />
+        </button>
         {slide.caption && <figcaption class="hand">{slide.caption}</figcaption>}
         {multiple && (
           <span class="sr-only">Image {i + 1} sur {slides.length}</span>
@@ -66,6 +68,7 @@ const multiple = slides.length > 1;
   .hero-slide {
     flex: 0 0 100%;
     scroll-snap-align: start;
+    position: relative; /* le texte caché .sr-only reste dans sa diapo (sinon il élargit la page) */
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -73,12 +76,14 @@ const multiple = slides.length > 1;
     justify-content: center;
     min-height: 0;
   }
+  .hero-slide .zoom { display: flex; justify-content: center; width: 100%; }
   .hero-slide :global(img) {
     display: block;
     width: auto;
     height: auto;
     max-width: 100%;
     max-height: min(82vh, 920px);
+    max-height: min(82dvh, 920px);
     object-fit: contain;
   }
   .hero-slide figcaption {
@@ -101,7 +106,8 @@ const multiple = slides.length > 1;
     font-size: 0.85rem;
     letter-spacing: 0.08em;
     color: var(--fg-2);
-    padding: 0.35em 0.2em;
+    padding: 0.8em 0.9em;
+    margin: -0.45em -0.7em;
   }
   .hero-btn:hover, .hero-btn:focus-visible { color: var(--accent); }
   .hero-dots { display: flex; gap: 0.45em; }
@@ -112,14 +118,20 @@ const multiple = slides.length > 1;
     border-radius: 99px;
     background: var(--line);
     cursor: pointer;
+    position: relative;
   }
+  /* zone de toucher élargie autour du petit point */
+  .dot::after { content: ''; position: absolute; inset: -12px -6px; }
   .dot.on { background: var(--accent); }
   .sr-only {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 1px;
     height: 1px;
     overflow: hidden;
     clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 </style>
 
@@ -154,6 +166,7 @@ const multiple = slides.length > 1;
     });
     track.addEventListener('scroll', () => paint(), { passive: true });
     window.addEventListener('keydown', (e) => {
+      if (document.querySelector('dialog[open]')) return;
       if (e.key === 'ArrowLeft') go(indexFromScroll() - 1);
       if (e.key === 'ArrowRight') go(indexFromScroll() + 1);
     });
