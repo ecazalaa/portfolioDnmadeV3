@@ -5,14 +5,17 @@ year: 2025/2026
 place: Toulouse et ses environs
 tools: Dessins crayon, feutres, aquarelles
 order: 1
-cover: Scanné 2 oct. 2026 à 10_54_25_page-0001.jpg
+cover: DNMADE20261007161931_pages-to-jpg-0001.jpg
 coverAlt: croquis aquarelle paysage
 covers:
   - src: garonne.jpg
+  - src: DNMADE20261007161931_pages-to-jpg-0001.jpg
   - src: DNMADE20260921135229_page-0001.jpg
   - src: DNMADE20260921135304_page-0001.jpg
   - src: img006.png
-  - src: DNMADE20261007161931_pages-to-jpg-0001.jpg
+  - src: Scanné 3 nov. 2026 à 21_01_13_page-0001.jpg
+    caption: test ancre sépia
+  - src: Scanné 3 nov. 2026 à 21_08_16_page-0001.jpg
   - src: DNMADE20261007161957_page-0001.jpg
 gallery:
   - src: Scanné 2 oct. 2026 à 10_52_50_page-0001.jpg
