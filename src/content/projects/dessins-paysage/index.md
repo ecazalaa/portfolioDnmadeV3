@@ -5,7 +5,7 @@ year: 2025/2026
 place: Toulouse et ses environs
 tools: Dessins crayon, feutres, aquarelles
 order: 1
-cover: DNMADE20261007161931_pages-to-jpg-0001.jpg
+cover: Scanné 3 nov. 2026 à 21_01_13_page-0001.jpg
 coverAlt: croquis aquarelle paysage
 covers:
   - src: garonne.jpg
