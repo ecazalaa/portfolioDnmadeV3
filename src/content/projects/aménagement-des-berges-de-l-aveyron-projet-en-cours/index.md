@@ -23,8 +23,6 @@ covers:
     caption: croquis dans l'espace
   - src: Capture d’écran 2026-10-15 à 11.26.24.png
     caption: Premiers plans Autocad
-  - src: ANALYSE.png
-    caption: analyse du site
 gallery:
   - src: 10.png
     caption: plan masse
