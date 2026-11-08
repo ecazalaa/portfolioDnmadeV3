@@ -21,8 +21,8 @@ covers:
     caption: Analyse technique
   - src: IMG_4980.png
     caption: croquis dans l'espace
-  - src: Capture d’écran 2026-10-15 à 11.26.24.png
-    caption: Premiers plans Autocad
+  - src: Planches-2-1.png
+    caption: Développement de l'hypothèse
 gallery:
   - src: 10.png
     caption: plan masse
@@ -40,6 +40,7 @@ gallery:
     caption: Coupe CC
     size: m
   - src: Scanné 15 oct. 2026 à 11_22_29_page-0001.jpg
+    caption: Planche de recherche
     size: l
   - src: Scanné 15 oct. 2026 à 11_20_56_page-0001.jpg
     size: m
