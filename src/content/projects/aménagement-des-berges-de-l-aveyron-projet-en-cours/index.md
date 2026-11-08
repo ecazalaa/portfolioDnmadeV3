@@ -19,6 +19,8 @@ covers:
     caption: Recherches de références et de dispositifs
   - src: Planches.png
     caption: Analyse technique
+  - src: Planches-3-1.png
+    caption: Hypothèse
   - src: Planches-2-1.png
     caption: Développement de l'hypothèse
   - src: IMG_4980.png
