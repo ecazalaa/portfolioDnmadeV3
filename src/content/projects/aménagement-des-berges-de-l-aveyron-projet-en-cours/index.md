@@ -19,10 +19,10 @@ covers:
     caption: Recherches de références et de dispositifs
   - src: Planches.png
     caption: Analyse technique
-  - src: IMG_4980.png
-    caption: croquis dans l'espace
   - src: Planches-2-1.png
     caption: Développement de l'hypothèse
+  - src: IMG_4980.png
+    caption: croquis dans l'espace
 gallery:
   - src: 10.png
     caption: plan masse
